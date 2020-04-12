@@ -1,0 +1,872 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>driver_SEIR_model_fitting</title><meta name="generator" content="MATLAB 9.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-02-25"><meta name="DC.source" content="driver_SEIR_model_fitting.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> driver_SEIR_model_fitting
+
+<span class="comment">% For figure (1) - (18):</span>
+<span class="comment">%</span>
+<span class="comment">% Parameter Configuration:</span>
+<span class="comment">% total # people = 300;</span>
+<span class="comment">% # handshakes = 10;</span>
+<span class="comment">% infectious peroid = 5;</span>
+<span class="comment">% # initial infectives = 1.</span>
+<span class="comment">%</span>
+<span class="comment">% NOTE: This driver only analyse the LargeUni data. Feel free to add codes</span>
+<span class="comment">% to analyse the SmallUni as well as Highschool data.</span>
+
+clc
+
+<span class="comment">% Import data from test files:</span>
+[largeUni, smallUni, HighSchool] = import_data_from_txt_files();
+
+<span class="comment">% For 'LargeUni':</span>
+num_data_set_1 = 18;
+
+
+<span class="keyword">for</span> i  = 1 : num_data_set_1
+
+    figure(i);
+    SEIR_data = SIR_2_SEIR(largeUni{i});
+
+    <span class="comment">% Set Delta as constant whereas Gamma = A * exp(B * t), Beta = L / (1 + exp( (k) * (t - t_0))).</span>
+    [residual, L, k, t_0, A, B, Delta] = SEIR_optimisation_stage3(SEIR_data)
+    fprintf(<span class="string">'\n*******************************************************************\n'</span>);
+
+
+    <span class="comment">% To see how our Beta, Gamma, and Delta obtained from the optimisation</span>
+    <span class="comment">% stage behaves:</span>
+    <span class="comment">% Beta_array = SEIR_Beta_discrete(SEIR_data, @(t) L / (1 + exp( (k) * (t - t_0))));</span>
+    <span class="comment">% Gamma_array = SEIR_Gamma_discrete(SEIR_data, @(t) A * exp(B * t));</span>
+    <span class="comment">% Delta_array = SEIR_Delta_discrete(SEIR_data, @(t) Delta, Gamma_array);</span>
+
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput"> 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 381.530287 
+
+
+residual =
+
+  381.5303
+
+
+L =
+
+    1.4307
+
+
+k =
+
+    0.4715
+
+
+t_0 =
+
+   12.1644
+
+
+A =
+
+    0.0266
+
+
+B =
+
+    0.2409
+
+
+Delta =
+
+    1.0000
+
+
+*******************************************************************
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 418.489128 
+
+
+residual =
+
+  418.4891
+
+
+L =
+
+    1.5853
+
+
+k =
+
+    0.2412
+
+
+t_0 =
+
+   11.9019
+
+
+A =
+
+    0.0261
+
+
+B =
+
+    0.2615
+
+
+Delta =
+
+    0.9599
+
+
+*******************************************************************
+
+residual =
+
+  367.7125
+
+
+L =
+
+    1.3129
+
+
+k =
+
+    0.5834
+
+
+t_0 =
+
+   12.2390
+
+
+A =
+
+    0.0191
+
+
+B =
+
+    0.2507
+
+
+Delta =
+
+    0.9904
+
+
+*******************************************************************
+
+residual =
+
+  484.7049
+
+
+L =
+
+    1.3577
+
+
+k =
+
+    0.5859
+
+
+t_0 =
+
+   13.1475
+
+
+A =
+
+    0.0020
+
+
+B =
+
+    0.4110
+
+
+Delta =
+
+    0.9609
+
+
+*******************************************************************
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 475.212920 
+
+
+residual =
+
+  475.2129
+
+
+L =
+
+    1.3869
+
+
+k =
+
+    1.6199
+
+
+t_0 =
+
+   11.1723
+
+
+A =
+
+    0.0285
+
+
+B =
+
+    0.2382
+
+
+Delta =
+
+    0.9906
+
+
+*******************************************************************
+
+residual =
+
+  555.9397
+
+
+L =
+
+    1.3369
+
+
+k =
+
+    0.7096
+
+
+t_0 =
+
+   12.2500
+
+
+A =
+
+    0.0098
+
+
+B =
+
+    0.2873
+
+
+Delta =
+
+    0.9722
+
+
+*******************************************************************
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 331.261730 
+
+
+residual =
+
+  331.2617
+
+
+L =
+
+    1.4253
+
+
+k =
+
+    0.6234
+
+
+t_0 =
+
+   10.6097
+
+
+A =
+
+    0.0350
+
+
+B =
+
+    0.2343
+
+
+Delta =
+
+    0.9948
+
+
+*******************************************************************
+
+residual =
+
+  463.1803
+
+
+L =
+
+    1.3379
+
+
+k =
+
+    0.8518
+
+
+t_0 =
+
+   10.0619
+
+
+A =
+
+    0.0332
+
+
+B =
+
+    0.2473
+
+
+Delta =
+
+    1.0010
+
+
+*******************************************************************
+
+residual =
+
+  499.1831
+
+
+L =
+
+    1.4053
+
+
+k =
+
+    0.3670
+
+
+t_0 =
+
+   13.2022
+
+
+A =
+
+    0.0205
+
+
+B =
+
+    0.2600
+
+
+Delta =
+
+    0.9845
+
+
+*******************************************************************
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 280.863330 
+
+
+residual =
+
+  280.8633
+
+
+L =
+
+    1.4587
+
+
+k =
+
+    0.5101
+
+
+t_0 =
+
+   10.3476
+
+
+A =
+
+    0.0601
+
+
+B =
+
+    0.1955
+
+
+Delta =
+
+    1.0070
+
+
+*******************************************************************
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 622.342232 
+
+
+residual =
+
+  622.3422
+
+
+L =
+
+    1.3102
+
+
+k =
+
+    0.5154
+
+
+t_0 =
+
+   12.0298
+
+
+A =
+
+    0.0584
+
+
+B =
+
+    0.2031
+
+
+Delta =
+
+    0.9903
+
+
+*******************************************************************
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 462.449827 
+
+
+residual =
+
+  462.4498
+
+
+L =
+
+    1.4770
+
+
+k =
+
+    0.6521
+
+
+t_0 =
+
+   10.8554
+
+
+A =
+
+    0.0490
+
+
+B =
+
+    0.1944
+
+
+Delta =
+
+    0.9981
+
+
+*******************************************************************
+
+residual =
+
+  442.8147
+
+
+L =
+
+    1.3497
+
+
+k =
+
+    1.0034
+
+
+t_0 =
+
+   11.1824
+
+
+A =
+
+    0.0266
+
+
+B =
+
+    0.2605
+
+
+Delta =
+
+    1.0063
+
+
+*******************************************************************
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 346.557815 
+
+
+residual =
+
+  346.5578
+
+
+L =
+
+    1.4047
+
+
+k =
+
+    1.0944
+
+
+t_0 =
+
+   10.8157
+
+
+A =
+
+    0.0365
+
+
+B =
+
+    0.2311
+
+
+Delta =
+
+    1.0001
+
+
+*******************************************************************
+
+residual =
+
+  444.4593
+
+
+L =
+
+    1.4180
+
+
+k =
+
+    1.6681
+
+
+t_0 =
+
+   10.9155
+
+
+A =
+
+    0.0110
+
+
+B =
+
+    0.3314
+
+
+Delta =
+
+    0.9778
+
+
+*******************************************************************
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 471.427302 
+
+
+residual =
+
+  471.4273
+
+
+L =
+
+    1.3549
+
+
+k =
+
+    0.5811
+
+
+t_0 =
+
+   12.5469
+
+
+A =
+
+    0.0264
+
+
+B =
+
+    0.2341
+
+
+Delta =
+
+    0.9842
+
+
+*******************************************************************
+
+residual =
+
+  209.4138
+
+
+L =
+
+    1.5959
+
+
+k =
+
+    0.4817
+
+
+t_0 =
+
+   10.1022
+
+
+A =
+
+    0.0748
+
+
+B =
+
+    0.1908
+
+
+Delta =
+
+    0.9918
+
+
+*******************************************************************
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 572.077880 
+
+
+residual =
+
+  572.0779
+
+
+L =
+
+    1.2882
+
+
+k =
+
+    1.1962
+
+
+t_0 =
+
+   12.4774
+
+
+A =
+
+    0.0033
+
+
+B =
+
+    0.4023
+
+
+Delta =
+
+    0.9478
+
+
+*******************************************************************
+</pre><img vspace="5" hspace="5" src="driver_SEIR_model_fitting_01.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_02.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_03.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_04.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_05.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_06.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_07.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_08.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_09.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_10.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_11.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_12.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_13.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_14.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_15.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_16.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_17.png" alt=""> <img vspace="5" hspace="5" src="driver_SEIR_model_fitting_18.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function driver_SEIR_model_fitting
+
+% For figure (1) - (18):
+%
+% Parameter Configuration: 
+% total # people = 300;
+% # handshakes = 10;
+% infectious peroid = 5;
+% # initial infectives = 1.
+%
+% NOTE: This driver only analyse the LargeUni data. Feel free to add codes
+% to analyse the SmallUni as well as Highschool data. 
+
+clc
+
+% Import data from test files: 
+[largeUni, smallUni, HighSchool] = import_data_from_txt_files();
+
+% For 'LargeUni': 
+num_data_set_1 = 18;
+
+
+for i  = 1 : num_data_set_1
+    
+    figure(i); 
+    SEIR_data = SIR_2_SEIR(largeUni{i});
+        
+    % Set Delta as constant whereas Gamma = A * exp(B * t), Beta = L / (1 + exp( (k) * (t - t_0))). 
+    [residual, L, k, t_0, A, B, Delta] = SEIR_optimisation_stage3(SEIR_data)
+    fprintf('\n*******************************************************************\n');
+    
+    
+    % To see how our Beta, Gamma, and Delta obtained from the optimisation
+    % stage behaves: 
+    % Beta_array = SEIR_Beta_discrete(SEIR_data, @(t) L / (1 + exp( (k) * (t - t_0)))); 
+    % Gamma_array = SEIR_Gamma_discrete(SEIR_data, @(t) A * exp(B * t));
+    % Delta_array = SEIR_Delta_discrete(SEIR_data, @(t) Delta, Gamma_array);
+    
+end
+
+end
+
+
+##### SOURCE END #####
+--></body></html>
