@@ -1,0 +1,1364 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>project_driver</title><meta name="generator" content="MATLAB 9.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-02-25"><meta name="DC.source" content="project_driver.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">PART ONE</a></li><li><a href="#3">PART TWO</a></li><li><a href="#4">PART THREE</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> project_driver
+</pre><h2 id="2">PART ONE</h2><p>When perform the handshake game to a University class with around 300 students:</p><p>Parameter Configurations: # handshakes = 10; infectious period = 5; # initial infectives: 1</p><pre class="codeinput">clc
+
+[largeUni, smallUni, HighSchool] = import_data_from_txt_files();
+
+num_data_set_1 = 20;
+<span class="keyword">for</span> i  = 1 : num_data_set_1
+    figure(i);
+    fprintf(<span class="string">'For Figure %d: \n'</span>, i);
+    SIR_optimisation_stages(largeUni{i});
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">For Figure 1: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 238.981595 
+
+
+residual =
+
+  238.9816
+
+
+k =
+
+    2.8362
+
+
+L =
+
+    0.7375
+
+
+t_0 =
+
+   21.1642
+
+
+A =
+
+    0.0082
+
+
+B =
+
+    0.3294
+
+**************************************************************************************
+For Figure 2: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 287.832891 
+
+
+residual =
+
+  287.8329
+
+
+k =
+
+    0.8793
+
+
+L =
+
+    0.7265
+
+
+t_0 =
+
+   14.6199
+
+
+A =
+
+    0.0145
+
+
+B =
+
+    0.2919
+
+**************************************************************************************
+For Figure 3: 
+
+residual =
+
+  240.5913
+
+
+k =
+
+    0.5810
+
+
+L =
+
+    0.7037
+
+
+t_0 =
+
+   16.4736
+
+
+A =
+
+    0.0054
+
+
+B =
+
+    0.3445
+
+**************************************************************************************
+For Figure 4: 
+
+residual =
+
+  834.8347
+
+
+k =
+
+    1.9471
+
+
+L =
+
+    0.7328
+
+
+t_0 =
+
+   27.2014
+
+
+A =
+
+   6.7296e-04
+
+
+B =
+
+    0.4927
+
+**************************************************************************************
+For Figure 5: 
+
+residual =
+
+  938.3436
+
+
+k =
+
+    0.9889
+
+
+L =
+
+    0.7286
+
+
+t_0 =
+
+   20.4388
+
+
+A =
+
+    0.0044
+
+
+B =
+
+    0.3951
+
+**************************************************************************************
+For Figure 6: 
+
+residual =
+
+  541.6948
+
+
+k =
+
+    1.1891
+
+
+L =
+
+    0.7207
+
+
+t_0 =
+
+   21.2143
+
+
+A =
+
+    0.0028
+
+
+B =
+
+    0.3825
+
+**************************************************************************************
+For Figure 7: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 1177.304966 
+
+
+residual =
+
+   1.1773e+03
+
+
+k =
+
+    1.3746
+
+
+L =
+
+    0.7571
+
+
+t_0 =
+
+   12.1362
+
+
+A =
+
+    0.0057
+
+
+B =
+
+    0.3488
+
+**************************************************************************************
+For Figure 8: 
+
+residual =
+
+  235.0513
+
+
+k =
+
+    0.8765
+
+
+L =
+
+    0.7299
+
+
+t_0 =
+
+   12.4174
+
+
+A =
+
+    0.0121
+
+
+B =
+
+    0.3131
+
+**************************************************************************************
+For Figure 9: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 669.694504 
+
+
+residual =
+
+  669.6945
+
+
+k =
+
+    0.6517
+
+
+L =
+
+    0.7327
+
+
+t_0 =
+
+   11.4912
+
+
+A =
+
+    0.0206
+
+
+B =
+
+    0.2690
+
+**************************************************************************************
+For Figure 10: 
+
+residual =
+
+  388.1874
+
+
+k =
+
+   30.0732
+
+
+L =
+
+    0.7227
+
+
+t_0 =
+
+   18.6322
+
+
+A =
+
+    0.0068
+
+
+B =
+
+    0.3391
+
+**************************************************************************************
+For Figure 11: 
+
+residual =
+
+  253.8077
+
+
+k =
+
+    0.5214
+
+
+L =
+
+    0.7226
+
+
+t_0 =
+
+   12.5998
+
+
+A =
+
+    0.0160
+
+
+B =
+
+    0.2964
+
+**************************************************************************************
+For Figure 12: 
+
+residual =
+
+  239.7507
+
+
+k =
+
+    0.3303
+
+
+L =
+
+    0.7088
+
+
+t_0 =
+
+   16.2067
+
+
+A =
+
+    0.0309
+
+
+B =
+
+    0.2290
+
+**************************************************************************************
+For Figure 13: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 727.898322 
+
+
+residual =
+
+  727.8983
+
+
+k =
+
+    0.3590
+
+
+L =
+
+    0.7050
+
+
+t_0 =
+
+   30.4671
+
+
+A =
+
+    0.0121
+
+
+B =
+
+    0.2796
+
+**************************************************************************************
+For Figure 14: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 241.709755 
+
+
+residual =
+
+  241.7098
+
+
+k =
+
+    0.9670
+
+
+L =
+
+    0.7481
+
+
+t_0 =
+
+   12.8510
+
+
+A =
+
+    0.0138
+
+
+B =
+
+    0.2924
+
+**************************************************************************************
+For Figure 15: 
+
+residual =
+
+  517.3396
+
+
+k =
+
+    1.0959
+
+
+L =
+
+    0.7143
+
+
+t_0 =
+
+   13.5367
+
+
+A =
+
+    0.0052
+
+
+B =
+
+    0.3937
+
+**************************************************************************************
+For Figure 16: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 281.273074 
+
+
+residual =
+
+  281.2731
+
+
+k =
+
+    4.2114
+
+
+L =
+
+    0.7339
+
+
+t_0 =
+
+   12.0767
+
+
+A =
+
+    0.0087
+
+
+B =
+
+    0.3460
+
+**************************************************************************************
+For Figure 17: 
+
+residual =
+
+  926.4521
+
+
+k =
+
+    0.8305
+
+
+L =
+
+    0.7505
+
+
+t_0 =
+
+   14.7568
+
+
+A =
+
+    0.0018
+
+
+B =
+
+    0.4835
+
+**************************************************************************************
+For Figure 18: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 289.671216 
+
+
+residual =
+
+  289.6712
+
+
+k =
+
+    1.8957
+
+
+L =
+
+    0.7151
+
+
+t_0 =
+
+   20.4276
+
+
+A =
+
+    0.0073
+
+
+B =
+
+    0.3295
+
+**************************************************************************************
+For Figure 19: 
+
+residual =
+
+  188.3342
+
+
+k =
+
+    0.6751
+
+
+L =
+
+    0.7541
+
+
+t_0 =
+
+   12.0568
+
+
+A =
+
+    0.0224
+
+
+B =
+
+    0.2795
+
+**************************************************************************************
+For Figure 20: 
+
+residual =
+
+   1.6341e+03
+
+
+k =
+
+    0.6688
+
+
+L =
+
+    0.7051
+
+
+t_0 =
+
+   41.1261
+
+
+A =
+
+   5.6339e-04
+
+
+B =
+
+    0.5411
+
+**************************************************************************************
+</pre><img vspace="5" hspace="5" src="project_driver_01.png" alt=""> <img vspace="5" hspace="5" src="project_driver_02.png" alt=""> <img vspace="5" hspace="5" src="project_driver_03.png" alt=""> <img vspace="5" hspace="5" src="project_driver_04.png" alt=""> <img vspace="5" hspace="5" src="project_driver_05.png" alt=""> <img vspace="5" hspace="5" src="project_driver_06.png" alt=""> <img vspace="5" hspace="5" src="project_driver_07.png" alt=""> <img vspace="5" hspace="5" src="project_driver_08.png" alt=""> <img vspace="5" hspace="5" src="project_driver_09.png" alt=""> <img vspace="5" hspace="5" src="project_driver_10.png" alt=""> <img vspace="5" hspace="5" src="project_driver_11.png" alt=""> <img vspace="5" hspace="5" src="project_driver_12.png" alt=""> <img vspace="5" hspace="5" src="project_driver_13.png" alt=""> <img vspace="5" hspace="5" src="project_driver_14.png" alt=""> <img vspace="5" hspace="5" src="project_driver_15.png" alt=""> <img vspace="5" hspace="5" src="project_driver_16.png" alt=""> <img vspace="5" hspace="5" src="project_driver_17.png" alt=""> <img vspace="5" hspace="5" src="project_driver_18.png" alt=""> <img vspace="5" hspace="5" src="project_driver_19.png" alt=""> <img vspace="5" hspace="5" src="project_driver_20.png" alt=""> <h2 id="3">PART TWO</h2><p>When perform the handshake game to a University class with around 70 students:</p><p>For figures (1) - (2): # handshakes = 7; infectious period = 3.</p><p>For figure (3) - (4): # handshakes = 7; infectious period = 5.</p><p>For figure (5) - (6): # handshakes = 10; infectious period = 3</p><p>For figure (7) - (8): # handshakes = 7; infectious period = 7</p><pre class="codeinput">clc
+
+[largeUni, smallUni, HighSchool] = import_data_from_txt_files();
+
+num_data_set_2 = 8;
+<span class="keyword">for</span> i  = 1 : num_data_set_2
+    figure(i);
+    fprintf(<span class="string">'For Figure %d: \n'</span>, i);
+    SIR_optimisation_stages(smallUni{i});
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">For Figure 1: 
+
+residual =
+
+   23.4590
+
+
+k =
+
+    0.1692
+
+
+L =
+
+    0.9536
+
+
+t_0 =
+
+   10.3033
+
+
+A =
+
+    0.0330
+
+
+B =
+
+    0.3396
+
+**************************************************************************************
+For Figure 2: 
+
+residual =
+
+   94.4038
+
+
+k =
+
+    0.5416
+
+
+L =
+
+    0.7085
+
+
+t_0 =
+
+   10.2866
+
+
+A =
+
+    0.0190
+
+
+B =
+
+    0.3988
+
+**************************************************************************************
+For Figure 3: 
+
+residual =
+
+   71.7960
+
+
+k =
+
+    0.3051
+
+
+L =
+
+    0.8303
+
+
+t_0 =
+
+   11.0197
+
+
+A =
+
+    0.0209
+
+
+B =
+
+    0.3732
+
+**************************************************************************************
+For Figure 4: 
+
+residual =
+
+   67.6106
+
+
+k =
+
+    0.1051
+
+
+L =
+
+    0.6460
+
+
+t_0 =
+
+   76.5967
+
+
+A =
+
+    0.0172
+
+
+B =
+
+    0.3659
+
+**************************************************************************************
+For Figure 5: 
+
+residual =
+
+  119.4494
+
+
+k =
+
+    0.3718
+
+
+L =
+
+    0.6836
+
+
+t_0 =
+
+   59.3182
+
+
+A =
+
+    0.0062
+
+
+B =
+
+    0.4250
+
+**************************************************************************************
+For Figure 6: 
+
+residual =
+
+  132.3013
+
+
+k =
+
+    0.5410
+
+
+L =
+
+    0.6657
+
+
+t_0 =
+
+   47.5494
+
+
+A =
+
+    0.0161
+
+
+B =
+
+    0.3228
+
+**************************************************************************************
+For Figure 7: 
+
+residual =
+
+  107.7384
+
+
+k =
+
+    1.3127
+
+
+L =
+
+    0.6902
+
+
+t_0 =
+
+   58.4029
+
+
+A =
+
+    0.0031
+
+
+B =
+
+    0.5581
+
+**************************************************************************************
+For Figure 8: 
+
+residual =
+
+  127.4672
+
+
+k =
+
+    0.6079
+
+
+L =
+
+    0.7135
+
+
+t_0 =
+
+   19.1333
+
+
+A =
+
+   2.9783e-04
+
+
+B =
+
+    0.8109
+
+**************************************************************************************
+</pre><img vspace="5" hspace="5" src="project_driver_21.png" alt=""> <img vspace="5" hspace="5" src="project_driver_22.png" alt=""> <img vspace="5" hspace="5" src="project_driver_23.png" alt=""> <img vspace="5" hspace="5" src="project_driver_24.png" alt=""> <img vspace="5" hspace="5" src="project_driver_25.png" alt=""> <img vspace="5" hspace="5" src="project_driver_26.png" alt=""> <img vspace="5" hspace="5" src="project_driver_27.png" alt=""> <img vspace="5" hspace="5" src="project_driver_28.png" alt=""> <h2 id="4">PART THREE</h2><p>When perform the handshake game to a highschool class with around 30 students:</p><p>For figures (1) - (2), (5): # handshakes = 6; infectious period = 3.</p><p>For figures (3) - (4): # handshakes = 5; infectious period = 5.</p><pre class="codeinput">clc
+
+[largeUni, smallUni, HighSchool] = import_data_from_txt_files();
+
+num_data_set_3 = 5;
+<span class="keyword">for</span> i  = 1 : num_data_set_3
+    figure(i);
+    fprintf(<span class="string">'For Figure %d: \n'</span>, i);
+    SIR_optimisation_stages(HighSchool{i});
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">For Figure 1: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 4.233919 
+
+
+residual =
+
+    4.2339
+
+
+k =
+
+    6.4168
+
+
+L =
+
+    0.7661
+
+
+t_0 =
+
+    7.2567
+
+
+A =
+
+    0.0150
+
+
+B =
+
+    0.4973
+
+**************************************************************************************
+For Figure 2: 
+
+residual =
+
+    5.8407
+
+
+k =
+
+    0.5590
+
+
+L =
+
+    0.8007
+
+
+t_0 =
+
+    8.2241
+
+
+A =
+
+    0.0052
+
+
+B =
+
+    0.8612
+
+**************************************************************************************
+For Figure 3: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 33.953898 
+
+
+residual =
+
+   33.9539
+
+
+k =
+
+    0.5674
+
+
+L =
+
+    0.7879
+
+
+t_0 =
+
+   34.6146
+
+
+A =
+
+    0.0424
+
+
+B =
+
+    0.2793
+
+**************************************************************************************
+For Figure 4: 
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 33.611542 
+
+
+residual =
+
+   33.6115
+
+
+k =
+
+    0.0061
+
+
+L =
+
+    1.1978
+
+
+t_0 =
+
+  103.0405
+
+
+A =
+
+    0.1522
+
+
+B =
+
+    0.1412
+
+**************************************************************************************
+For Figure 5: 
+
+residual =
+
+    3.6230
+
+
+k =
+
+    0.4064
+
+
+L =
+
+    1.5261
+
+
+t_0 =
+
+   -0.2879
+
+
+A =
+
+    0.0025
+
+
+B =
+
+    1.6592
+
+**************************************************************************************
+</pre><img vspace="5" hspace="5" src="project_driver_29.png" alt=""> <img vspace="5" hspace="5" src="project_driver_30.png" alt=""> <img vspace="5" hspace="5" src="project_driver_31.png" alt=""> <img vspace="5" hspace="5" src="project_driver_32.png" alt=""> <img vspace="5" hspace="5" src="project_driver_33.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+</pre><pre class="codeoutput">Exception in thread "AWT-EventQueue-0": java.lang.ClassCastException: javax.swing.plaf.basic.BasicComboBoxUI cannot be cast to com.jidesoft.plaf.ExComboBoxUI
+	at com.jidesoft.grid.JideTable.removeEditor(Unknown Source)
+	at com.jidesoft.grid.JideTable.editingStopped(Unknown Source)
+	at javax.swing.AbstractCellEditor.fireEditingStopped(AbstractCellEditor.java:141)
+	at javax.swing.AbstractCellEditor.stopCellEditing(AbstractCellEditor.java:85)
+	at com.jidesoft.grid.ExComboBoxCellEditor.stopCellEditing(Unknown Source)
+	at com.jidesoft.grid.JideTable$s_.propertyChange(Unknown Source)
+	at java.beans.PropertyChangeSupport.fire(PropertyChangeSupport.java:335)
+	at java.beans.PropertyChangeSupport.firePropertyChange(PropertyChangeSupport.java:328)
+	at java.beans.PropertyChangeSupport.firePropertyChange(PropertyChangeSupport.java:263)
+	at java.awt.KeyboardFocusManager.firePropertyChange(KeyboardFocusManager.java:1493)
+	at java.awt.KeyboardFocusManager.setGlobalPermanentFocusOwner(KeyboardFocusManager.java:780)
+	at java.awt.DefaultKeyboardFocusManager.dispatchEvent(DefaultKeyboardFocusManager.java:616)
+	at java.awt.Component.dispatchEventImpl(Component.java:4760)
+	at java.awt.Container.dispatchEventImpl(Container.java:2297)
+	at java.awt.Component.dispatchEvent(Component.java:4711)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:760)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:74)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:84)
+	at java.awt.EventQueue$4.run(EventQueue.java:733)
+	at java.awt.EventQueue$4.run(EventQueue.java:731)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:74)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:730)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:205)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+Exception in thread "AWT-EventQueue-0": java.lang.ClassCastException: javax.swing.plaf.basic.BasicComboBoxUI cannot be cast to com.jidesoft.plaf.ExComboBoxUI
+	at com.jidesoft.grid.JideTable.removeEditor(Unknown Source)
+	at com.jidesoft.grid.JideTable.editingStopped(Unknown Source)
+	at javax.swing.AbstractCellEditor.fireEditingStopped(AbstractCellEditor.java:141)
+	at javax.swing.AbstractCellEditor.stopCellEditing(AbstractCellEditor.java:85)
+	at com.jidesoft.grid.ExComboBoxCellEditor.stopCellEditing(Unknown Source)
+	at com.jidesoft.grid.JideTable$s_.propertyChange(Unknown Source)
+	at java.beans.PropertyChangeSupport.fire(PropertyChangeSupport.java:335)
+	at java.beans.PropertyChangeSupport.firePropertyChange(PropertyChangeSupport.java:328)
+	at java.beans.PropertyChangeSupport.firePropertyChange(PropertyChangeSupport.java:263)
+	at java.awt.KeyboardFocusManager.firePropertyChange(KeyboardFocusManager.java:1493)
+	at java.awt.KeyboardFocusManager.setGlobalPermanentFocusOwner(KeyboardFocusManager.java:780)
+	at java.awt.DefaultKeyboardFocusManager.dispatchEvent(DefaultKeyboardFocusManager.java:616)
+	at java.awt.Component.dispatchEventImpl(Component.java:4760)
+	at java.awt.Container.dispatchEventImpl(Container.java:2297)
+	at java.awt.Component.dispatchEvent(Component.java:4711)
+	at java.awt.KeyboardFocusManager.dispatchAndCatchException(KeyboardFocusManager.java:2601)
+	at java.awt.KeyboardFocusManager.processCurrentLightweightRequests(KeyboardFocusManager.java:2697)
+	at java.awt.KeyboardFocusManager$4.run(KeyboardFocusManager.java:2804)
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:758)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:74)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:728)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:205)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function project_driver
+%% PART ONE 
+% When perform the handshake game to a University class with around 300 
+% students: 
+%
+% Parameter Configurations: 
+% # handshakes = 10;
+% infectious period = 5;
+% # initial infectives: 1
+
+clc
+
+[largeUni, smallUni, HighSchool] = import_data_from_txt_files();
+
+num_data_set_1 = 20;
+for i  = 1 : num_data_set_1
+    figure(i); 
+    fprintf('For Figure %d: \n', i);
+    SIR_optimisation_stages(largeUni{i});
+end
+
+
+%% PART TWO
+% When perform the handshake game to a University class with around 70 
+% students:
+%
+% For figures (1) - (2): 
+% # handshakes = 7;
+% infectious period = 3.
+%
+% For figure (3) - (4): 
+% # handshakes = 7;
+% infectious period = 5.
+%
+% For figure (5) - (6): 
+% # handshakes = 10;
+% infectious period = 3
+%
+% For figure (7) - (8): 
+% # handshakes = 7;
+% infectious period = 7
+
+
+clc
+
+[largeUni, smallUni, HighSchool] = import_data_from_txt_files();
+
+num_data_set_2 = 8;
+for i  = 1 : num_data_set_2
+    figure(i);
+    fprintf('For Figure %d: \n', i);
+    SIR_optimisation_stages(smallUni{i});
+end
+
+
+%% PART THREE
+% When perform the handshake game to a highschool class with around 30 
+% students:
+%
+% For figures (1) - (2), (5): 
+% # handshakes = 6;
+% infectious period = 3.
+%
+% For figures (3) - (4): 
+% # handshakes = 5;
+% infectious period = 5.
+
+clc
+
+[largeUni, smallUni, HighSchool] = import_data_from_txt_files();
+
+num_data_set_3 = 5;
+for i  = 1 : num_data_set_3
+    figure(i);
+    fprintf('For Figure %d: \n', i);
+    SIR_optimisation_stages(HighSchool{i});
+end
+
+
+
+end
+
+##### SOURCE END #####
+--></body></html>
